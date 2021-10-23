@@ -33,7 +33,7 @@ func handleConn(conn net.Conn) {
 	defer conn.Close()
 	log.Printf("remote address: %v\n", conn.RemoteAddr())
 
-	var buf [9216]byte
+	var buf [1024*9]byte
 
 	n, err := conn.Read(buf[:])
 	if err != nil {
@@ -56,8 +56,6 @@ func handleConn(conn net.Conn) {
 			target = hostPortURL.Host + ":80"
 		}
 	}
-
-	// 请求数据记录
 
 	server, err := net.Dial("tcp", target)
 	if err != nil {
