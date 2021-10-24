@@ -9,7 +9,7 @@ import (
 
 type Ifcs map[string]pcap.Interface
 
-func (ifcs Ifcs) fmtPrintAndGet() *pcap.Interface {
+func (ifcs Ifcs) fmtPrint() {
 	for _, ifc := range ifcs {
 		addrsLenth := len(ifc.Addresses)
 		if addrsLenth == 0 {
@@ -19,15 +19,8 @@ func (ifcs Ifcs) fmtPrintAndGet() *pcap.Interface {
 		for _, addr := range ifc.Addresses {
 			ips = append(ips, addr.IP.String())
 		}
-		log.Println(ifc.Name, strings.Join(ips, ","))
+		fmt.Println(ifc.Name, strings.Join(ips, ","))
 	}
-	log.Println("输入监控的网卡：")
-	var name string
-	fmt.Scanln(&name)
-	if ifc, ok := ifcs[name]; ok {
-		return &ifc
-	}
-	return nil
 }
 
 func NewIfcs(pIfcs []pcap.Interface) Ifcs {
@@ -38,7 +31,7 @@ func NewIfcs(pIfcs []pcap.Interface) Ifcs {
 	return ifcs
 }
 
-func Monitor() {
+func ParseAndPrint() {
 	devices, err := parseDevices()
 	if err != nil {
 		log.Printf("解析网卡错误:%s", err.Error())
@@ -49,9 +42,7 @@ func Monitor() {
 		return
 	}
 	ifcs := NewIfcs(devices)
-	ifc := ifcs.fmtPrintAndGet()
-	// TODO
-	log.Println(ifc)
+	ifcs.fmtPrint()
 }
 
 func parseDevices() ([]pcap.Interface, error) {

@@ -7,7 +7,7 @@ import (
 )
 
 func TestMonitor(t *testing.T) {
-	Monitor()
+	ParseAndPrint()
 }
 
 func TestParseDevices(t *testing.T) {
